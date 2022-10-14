@@ -1,0 +1,81 @@
+Sub DATA_EXPORT_DXF_PDF()
+
+Dim oapp As Inventor.Application
+Set oapp = ThisApplication
+Dim odoc As Inventor.DrawingDocument
+Dim osource As String
+Dim odest As String
+Dim ofolder As String
+Dim ofileName As String
+Dim Respone As String
+ 
+
+If oapp.ActiveDocument Is Nothing Then
+    Response = MsgBox("No drawing document open", vbYes, "Export")
+    Exit Sub
+End If
+
+If oapp.ActiveDocumentType <> kDrawingDocumentObject Then
+    Response = MsgBox("No drawing document open", vbYes, "Export")
+    Exit Sub
+End If
+
+Set odoc = oapp.ActiveDocument
+osource = odoc.FullFileName
+ofolder = Left(osource, Len(osource) - Len(odoc.DisplayName))
+ofileName = Left(odoc.DisplayName, Len(odoc.DisplayName) - 4)
+
+
+
+Dim osheet As Inventor.Sheet
+Dim counter As String
+
+counter = 1
+
+For Each osheet In odoc.Sheets
+osheet.Activate
+Call odoc.SaveAs(ofolder & ofileName & ".dxf", True)
+Call odoc.SaveAs(ofolder & ofileName & ".pdf", True)
+
+counter = counter + 1
+
+Next
+
+Response = MsgBox("dxf & pdf created", vbYes, "Export")
+
+End Sub
+
+
+
+Sub DATA_EXPORT_STEP()
+
+Dim oapp As Inventor.Application
+Set oapp = ThisApplication
+Dim odoc As Inventor.PartDocument
+Dim osource As String
+Dim odest As String
+Dim ofolder As String
+Dim ofileName As String
+
+Dim Response As String
+
+If oapp.ActiveDocument Is Nothing Then
+    Response = MsgBox("No part document open", vbYes, "Export")
+    Exit Sub
+End If
+
+If oapp.ActiveDocumentType <> kPartDocumentObject Then
+    Response = MsgBox("No part document open", vbYes, "Export")
+    Exit Sub
+End If
+
+
+Set odoc = oapp.ActiveDocument
+osource = odoc.FullFileName
+ofolder = Left(osource, Len(osource) - Len(odoc.DisplayName))
+ofileName = Left(odoc.DisplayName, Len(odoc.DisplayName) - 4)
+Call odoc.SaveAs(ofolder & ofileName & ".step", True)
+
+Response = MsgBox("step created", vbYes, "Export")
+
+End Sub

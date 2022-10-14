@@ -1,0 +1,36 @@
+Sub drawing()
+Dim oapp As Inventor.Application
+Set oapp = ThisApplication
+Dim odoc As Inventor.DrawingDocument
+Dim osource As String
+Dim odest As String
+
+If oapp.ActiveDocument Is Nothing Then
+    Exit Sub
+End If
+
+If oapp.ActiveDocumentType <> kDrawingDocumentObject Then
+    Exit Sub
+End If
+
+Set odoc = oapp.ActiveDocument
+'osource = odoc.FullFileName
+osource = Environ("userprofile") & "\Desktop\" & odoc.DisplayName
+odest = Left(osource, Len(osource) - 4)
+
+
+Dim osheet As Inventor.Sheet
+Dim counter As String
+
+counter = 1
+
+For Each osheet In odoc.Sheets
+osheet.Activate
+Call odoc.SaveAs(odest & "Blatt" & counter & ".dxf", True)
+Call odoc.SaveAs(odest & "Blatt" & counter & ".pdf", True)
+counter = counter + 1
+Next
+
+End Sub
+
+http://ww3.cad.de/foren/ubb/Forum50/HTML/039278.shtml
